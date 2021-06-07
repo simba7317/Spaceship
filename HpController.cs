@@ -28,6 +28,4 @@ public Image image_gauge;
         text_total.text = totalOxygen.ToString();
 
     }
-
-    
 }
