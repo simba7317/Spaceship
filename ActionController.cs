@@ -7,20 +7,22 @@ public class ActionController : MonoBehaviour
 {
 
     [SerializeField]
-    private float range; // ½Àµæ °¡´ÉÇÑ ÃÖ´ë °Å¸®
+    private float range; // ìŠµë“ ê°€ëŠ¥í•œ ìµœëŒ€ ê±°ë¦¬
 
-    private bool pickupActivated = false; // ½Àµæ °¡´ÉÇÒ ½Ã true
+    private bool pickupActivated = false; // ìŠµë“ ê°€ëŠ¥í•  ì‹œ true
 
-    private RaycastHit hitInfo; // Ãæµ¹Ã¼ Á¤º¸ ÀúÀå
+    private RaycastHit hitInfo; // ì¶©ëŒì²´ ì •ë³´ ì €ì¥
 
 
-    // ¾ÆÀÌÅÛ ·¹ÀÌ¾î¿¡¸¸ ¹İÀÀÇÏµµ·Ï ·¹ÀÌ¾î ¸¶½ºÅ©¸¦ ¼³Á¤
+    // ì•„ì´í…œ ë ˆì´ì–´ì—ë§Œ ë°˜ì‘í•˜ë„ë¡ ë ˆì´ì–´ ë§ˆìŠ¤í¬ë¥¼ ì„¤ì •
     [SerializeField]
     private LayerMask layerMask;
 
-    // ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ®
+    // í•„ìš”í•œ ì»´í¬ë„ŒíŠ¸
     [SerializeField]
     private Text actionText;
+    [SerializeField]
+    private Inventory theInventory;
 
     // Update is called once per frame
     void Update()
@@ -44,7 +46,7 @@ public class ActionController : MonoBehaviour
         {
             if (hitInfo.transform != null)
             {
-                Debug.Log(hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " È¹µæÇß½À´Ï´Ù");
+                Debug.Log(hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " íšë“í–ˆìŠµë‹ˆë‹¤");
                 Destroy(hitInfo.transform.gameObject);
                 InfoDisappear();
             }
@@ -68,7 +70,7 @@ public class ActionController : MonoBehaviour
     {
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
-        actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " È¹µæ " + "<color=blue>" + "(E)" + "</color>";
+        actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " íšë“ " + "<color=blue>" + "(E)" + "</color>";
     }
     private void InfoDisappear()
     {
