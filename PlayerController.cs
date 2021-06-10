@@ -25,8 +25,11 @@ public class PlayerController : MonoBehaviour
     {
 
         Move();
-        CameraRotation();
-        CharacterRotation();
+        if (!Inventory.inventoryActivated)
+        {
+            CameraRotation();
+            CharacterRotation();
+        }
 
     }
 
