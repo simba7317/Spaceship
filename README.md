@@ -42,6 +42,13 @@ J는 로봇에게서 우주선 부품을 얻을 수 있다는 것을 알고 우�
 - 총알을 모두 소진하면 R 키를 사용하여 재장전한다.
 - 로봇은 총을 두 번 맞으면 제거되도록 하였고 제거된 로봇으로부터 우주선 부품을 얻을 수 있게 된다.  
 
-![KakaoTalk_20210611_140830656](https://user-images.githubusercontent.com/84438387/121636466-ee92db00-cac2-11eb-8c32-5e3341d17376.png)
+![space](https://user-images.githubusercontent.com/84438387/121770734-13ac4a00-cba6-11eb-8f1a-185a5e76281a.png)   
+![space1](https://user-images.githubusercontent.com/84438387/121770746-24f55680-cba6-11eb-90c0-d95d4278d184.png)   
+![space2](https://user-images.githubusercontent.com/84438387/121770750-29ba0a80-cba6-11eb-952a-e6306a1c183d.png)   
+![space3](https://user-images.githubusercontent.com/84438387/121770754-2de62800-cba6-11eb-95f9-9bfddb27a7af.png)
+
+
+
+
 
 
