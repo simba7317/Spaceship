@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
 
     public Item item; // 획득한 아이템
@@ -17,6 +17,13 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     private Text text_Count;
     [SerializeField]
     private GameObject go_CountImage;
+
+    private ItemEffectDatabase theItemEffectDatabase;
+
+    void Start()
+    {
+        theItemEffectDatabase = FindObjectOfType<ItemEffectDatabase>();
+    }
 
     // 이미지의 투명도 조절
     private void SetColor(float _alpha)
@@ -75,8 +82,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         {
             if (item != null)
             {
-                    Debug.Log(item.itemName + " 을 사용했습니다");
-                    SetSlotCount(-1);
+                theItemEffectDatabase.UseItem(item);
+
+                SetSlotCount(-1);
             }
         }
     }
@@ -125,4 +133,18 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         else
             DragSlot.instance.dragSlot.ClearSlot();
     }
+
+    // 마우스가 슬롯에 들어갈 때 발동
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item != null)
+            theItemEffectDatabase.ShowToolTop(item, transform.position);
+    }
+
+    // 슬롯에서 빠져나갈 때 발동
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        theItemEffectDatabase.HideToolTip();
+    }
+
 }

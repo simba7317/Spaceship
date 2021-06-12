@@ -5,39 +5,39 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
 
-    // í˜„ì¬ ì¥ì°©ëœ ì´
+    // ÇöÀç ÀåÂøµÈ ÃÑ
     [SerializeField]
     private Gun currentGun;
 
 
-    // ì—°ì‚¬ ì†ë„ ê³„ì‚°
+    // ¿¬»ç ¼Óµµ °è»ê
     private float currentFireRate;
 
 
-    // ìƒíƒœ ë³€ìˆ˜
+    // »óÅÂ º¯¼ö
     private bool isReload = false;
     [HideInInspector]
     public bool isFineSightMode = false;
 
 
-    // ë³¸ë˜ í¬ì§€ì…˜ ê°’
+    // º»·¡ Æ÷Áö¼Ç °ª
     private Vector3 originPos;
 
 
-    // íš¨ê³¼ìŒ ì¬ìƒ
+    // È¿°úÀ½ Àç»ı
     private AudioSource audioSource;
 
 
-    // ë ˆì´ì € ì¶©ëŒ ì •ë³´ ë°›ì•„ì˜´
+    // ·¹ÀÌÀú Ãæµ¹ Á¤º¸ ¹Ş¾Æ¿È
     private RaycastHit hitInfo;
 
 
-    // í•„ìš”í•œ ì»´í¬ë„ŒíŠ¸
+    // ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ®
     [SerializeField]
     private Camera theCam;
 
 
-    // í”¼ê²© ì´í™íŠ¸
+    // ÇÇ°İ ÀÌÆåÆ®
     [SerializeField]
     private GameObject hit_effect_prefab;
 
@@ -45,8 +45,6 @@ public class GunController : MonoBehaviour
     {
         originPos = Vector3.zero;
         audioSource = GetComponent<AudioSource>();
-        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
-        WeaponManager.currentWeaponAnim = currentGun.anim;
     }
 
 
@@ -59,24 +57,27 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ì—°ì‚¬ì†ë„ ì¬ê³„ì‚°
+    // ¿¬»ç¼Óµµ Àç°è»ê
     private void GunFireRateCalc()
     {
         if (currentFireRate > 0)
             currentFireRate -= Time.deltaTime;
     }
 
-    // ë°œì‚¬ ì‹œë„
+    // ¹ß»ç ½Ãµµ
     private void TryFire()
     {
-        if (Input.GetButton("Fire1") && currentFireRate <= 0 && !isReload)
+        if(!Inventory.inventoryActivated) // ÀÎº¥Åä¸® ½ÇÇà ½Ã ¹ß»ç ¾È µÇ°Ô
         {
-            Fire();
+            if (Input.GetButton("Fire1") && currentFireRate <= 0 && !isReload)
+            {
+                Fire();
+            }
         }
     }
 
 
-    // ë°œì‚¬ ì „ ê³„ì‚°
+    // ¹ß»ç Àü °è»ê
     private void Fire()
     {
         if (!isReload)
@@ -93,11 +94,11 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // ë°œì‚¬ í›„ ê³„ì‚°
+    // ¹ß»ç ÈÄ °è»ê
     private void Shoot()
     {
         currentGun.currentBulletCount--;
-        currentFireRate = currentGun.fireRate; // ì—°ì‚¬ ì†ë„ ì¬ê³„ì‚°.
+        currentFireRate = currentGun.fireRate; // ¿¬»ç ¼Óµµ Àç°è»ê.
         PlaySE(currentGun.fire_Sound);
         currentGun.muzzleFlash.Play();
         Hit();
@@ -133,7 +134,7 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // ì¬ì¥ì „ ì‹œë„
+    // ÀçÀåÀü ½Ãµµ
     private void TryReload()
     {
         if (Input.GetKeyDown(KeyCode.R) && !isReload && currentGun.currentBulletCount < currentGun.reloadBulletCount)
@@ -144,7 +145,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ì¬ì¥ì „
+    // ÀçÀåÀü
     IEnumerator ReloadCoroutine()
     {
         if (currentGun.carryBulletCount > 0)
@@ -175,12 +176,12 @@ public class GunController : MonoBehaviour
         }
         else
         {
-            Debug.Log("ì†Œìœ í•œ ì´ì•Œì´ ì—†ìŠµë‹ˆë‹¤.");
+            Debug.Log("¼ÒÀ¯ÇÑ ÃÑ¾ËÀÌ ¾ø½À´Ï´Ù.");
         }
     }
 
 
-    // ì •ì¡°ì¤€ ì‹œë„
+    // Á¤Á¶ÁØ ½Ãµµ
     private void TryFineSight()
     {
         if (Input.GetButtonDown("Fire2") && !isReload)
@@ -190,7 +191,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ì •ì¡°ì¤€ ì·¨ì†Œ
+    // Á¤Á¶ÁØ Ãë¼Ò
     public void CancelFineSight()
     {
         if (isFineSightMode)
@@ -198,7 +199,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ì •ì¡°ì¤€ ë¡œì§ ê°€ë™
+    // Á¤Á¶ÁØ ·ÎÁ÷ °¡µ¿
     private void FineSight()
     {
         isFineSightMode = !isFineSightMode;
@@ -217,7 +218,7 @@ public class GunController : MonoBehaviour
 
     }
 
-    // ì •ì¡°ì¤€ í™œì„±í™”
+    // Á¤Á¶ÁØ È°¼ºÈ­
     IEnumerator FineSightActivateCoroutine()
     {
         while (currentGun.transform.localPosition != currentGun.fineSightOriginPos)
@@ -227,7 +228,7 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // ì •ì¡°ì¤€ ë¹„í™œì„±í™”
+    // Á¤Á¶ÁØ ºñÈ°¼ºÈ­
     IEnumerator FineSightDeactivateCoroutine()
     {
         while (currentGun.transform.localPosition != originPos)
@@ -238,7 +239,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ë°˜ë™ ì½”ë£¨í‹´
+    // ¹İµ¿ ÄÚ·çÆ¾
     IEnumerator RetroActionCoroutine()
     {
         Vector3 recoilBack = new Vector3(currentGun.retroActionForce, originPos.y, originPos.z);
@@ -249,14 +250,14 @@ public class GunController : MonoBehaviour
 
             currentGun.transform.localPosition = originPos;
 
-            // ë°˜ë™ ì‹œì‘
+            // ¹İµ¿ ½ÃÀÛ
             while (currentGun.transform.localPosition.x <= currentGun.retroActionForce - 0.02f)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, recoilBack, 0.4f);
                 yield return null;
             }
 
-            // ì›ìœ„ì¹˜
+            // ¿øÀ§Ä¡
             while (currentGun.transform.localPosition != originPos)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, originPos, 0.1f);
@@ -267,14 +268,14 @@ public class GunController : MonoBehaviour
         {
             currentGun.transform.localPosition = currentGun.fineSightOriginPos;
 
-            // ë°˜ë™ ì‹œì‘
+            // ¹İµ¿ ½ÃÀÛ
             while (currentGun.transform.localPosition.x <= currentGun.retroActionFineSightForce - 0.02f)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, retroActionRecoilBack, 0.4f);
                 yield return null;
             }
 
-            // ì›ìœ„ì¹˜
+            // ¿øÀ§Ä¡
             while (currentGun.transform.localPosition != currentGun.fineSightOriginPos)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, currentGun.fineSightOriginPos, 0.1f);
@@ -285,7 +286,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ì‚¬ìš´ë“œ ì¬ìƒ
+    // »ç¿îµå Àç»ı
     private void PlaySE(AudioClip _clip)
     {
         audioSource.clip = _clip;
