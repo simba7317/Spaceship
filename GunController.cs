@@ -4,40 +4,42 @@ using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
-
-    // ÇöÀç ÀåÂøµÈ ÃÑ
+    // í™œì„±í™” ì—¬ë¶€.
+    public static bool isActivate = true;
+    
+    // í˜„ì¬ ì¥ì°©ëœ ì´
     [SerializeField]
     private Gun currentGun;
 
 
-    // ¿¬»ç ¼Óµµ °è»ê
+    // ì—°ì‚¬ ì†ë„ ê³„ì‚°
     private float currentFireRate;
 
 
-    // »óÅÂ º¯¼ö
+    // ìƒíƒœ ë³€ìˆ˜
     private bool isReload = false;
     [HideInInspector]
     public bool isFineSightMode = false;
 
 
-    // º»·¡ Æ÷Áö¼Ç °ª
+    // ë³¸ë˜ í¬ì§€ì…˜ ê°’
     private Vector3 originPos;
 
 
-    // È¿°úÀ½ Àç»ı
+    // íš¨ê³¼ìŒ ì¬ìƒ
     private AudioSource audioSource;
 
 
-    // ·¹ÀÌÀú Ãæµ¹ Á¤º¸ ¹Ş¾Æ¿È
+    // ë ˆì´ì € ì¶©ëŒ ì •ë³´ ë°›ì•„ì˜´
     private RaycastHit hitInfo;
 
 
-    // ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ®
+    // í•„ìš”í•œ ì»´í¬ë„ŒíŠ¸
     [SerializeField]
     private Camera theCam;
 
 
-    // ÇÇ°İ ÀÌÆåÆ®
+    // í”¼ê²© ì´í™íŠ¸
     [SerializeField]
     private GameObject hit_effect_prefab;
 
@@ -57,14 +59,14 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ¿¬»ç¼Óµµ Àç°è»ê
+    // ì—°ì‚¬ì†ë„ ì¬ê³„ì‚°
     private void GunFireRateCalc()
     {
         if (currentFireRate > 0)
             currentFireRate -= Time.deltaTime;
     }
 
-    // ¹ß»ç ½Ãµµ
+    // ë°œì‚¬ ì‹œë„
     private void TryFire()
     {
         if (Input.GetButton("Fire1") && currentFireRate <= 0 && !isReload)
@@ -74,7 +76,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ¹ß»ç Àü °è»ê
+    // ë°œì‚¬ ì „ ê³„ì‚°
     private void Fire()
     {
         if (!isReload)
@@ -91,11 +93,11 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // ¹ß»ç ÈÄ °è»ê
+    // ë°œì‚¬ í›„ ê³„ì‚°
     private void Shoot()
     {
         currentGun.currentBulletCount--;
-        currentFireRate = currentGun.fireRate; // ¿¬»ç ¼Óµµ Àç°è»ê.
+        currentFireRate = currentGun.fireRate; // ì—°ì‚¬ ì†ë„ ì¬ê³„ì‚°.
         PlaySE(currentGun.fire_Sound);
         currentGun.muzzleFlash.Play();
         Hit();
@@ -113,7 +115,7 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // ÀçÀåÀü ½Ãµµ
+    // ì¬ì¥ì „ ì‹œë„
     private void TryReload()
     {
         if (Input.GetKeyDown(KeyCode.R) && !isReload && currentGun.currentBulletCount < currentGun.reloadBulletCount)
@@ -122,9 +124,18 @@ public class GunController : MonoBehaviour
             StartCoroutine(ReloadCoroutine());
         }
     }
+    
+       public void CancelReload()
+    {
+        if (isReload)
+        {
+            StopAllCoroutines();
+            isReload = false;
+        }
+    }
 
 
-    // ÀçÀåÀü
+    // ì¬ì¥ì „
     IEnumerator ReloadCoroutine()
     {
         if (currentGun.carryBulletCount > 0)
@@ -155,12 +166,12 @@ public class GunController : MonoBehaviour
         }
         else
         {
-            Debug.Log("¼ÒÀ¯ÇÑ ÃÑ¾ËÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ì†Œìœ í•œ ì´ì•Œì´ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
 
-    // Á¤Á¶ÁØ ½Ãµµ
+    // ì •ì¡°ì¤€ ì‹œë„
     private void TryFineSight()
     {
         if (Input.GetButtonDown("Fire2") && !isReload)
@@ -170,7 +181,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // Á¤Á¶ÁØ Ãë¼Ò
+    // ì •ì¡°ì¤€ ì·¨ì†Œ
     public void CancelFineSight()
     {
         if (isFineSightMode)
@@ -178,7 +189,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // Á¤Á¶ÁØ ·ÎÁ÷ °¡µ¿
+    // ì •ì¡°ì¤€ ë¡œì§ ê°€ë™
     private void FineSight()
     {
         isFineSightMode = !isFineSightMode;
@@ -197,7 +208,7 @@ public class GunController : MonoBehaviour
 
     }
 
-    // Á¤Á¶ÁØ È°¼ºÈ­
+    // ì •ì¡°ì¤€ í™œì„±í™”
     IEnumerator FineSightActivateCoroutine()
     {
         while (currentGun.transform.localPosition != currentGun.fineSightOriginPos)
@@ -207,7 +218,7 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // Á¤Á¶ÁØ ºñÈ°¼ºÈ­
+    // ì •ì¡°ì¤€ ë¹„í™œì„±í™”
     IEnumerator FineSightDeactivateCoroutine()
     {
         while (currentGun.transform.localPosition != originPos)
@@ -218,7 +229,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // ¹İµ¿ ÄÚ·çÆ¾
+    // ë°˜ë™ ì½”ë£¨í‹´
     IEnumerator RetroActionCoroutine()
     {
         Vector3 recoilBack = new Vector3(currentGun.retroActionForce, originPos.y, originPos.z);
@@ -229,14 +240,14 @@ public class GunController : MonoBehaviour
 
             currentGun.transform.localPosition = originPos;
 
-            // ¹İµ¿ ½ÃÀÛ
+            // ë°˜ë™ ì‹œì‘
             while (currentGun.transform.localPosition.x <= currentGun.retroActionForce - 0.02f)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, recoilBack, 0.4f);
                 yield return null;
             }
 
-            // ¿øÀ§Ä¡
+            // ì›ìœ„ì¹˜
             while (currentGun.transform.localPosition != originPos)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, originPos, 0.1f);
@@ -247,14 +258,14 @@ public class GunController : MonoBehaviour
         {
             currentGun.transform.localPosition = currentGun.fineSightOriginPos;
 
-            // ¹İµ¿ ½ÃÀÛ
+            // ë°˜ë™ ì‹œì‘
             while (currentGun.transform.localPosition.x <= currentGun.retroActionFineSightForce - 0.02f)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, retroActionRecoilBack, 0.4f);
                 yield return null;
             }
 
-            // ¿øÀ§Ä¡
+            // ì›ìœ„ì¹˜
             while (currentGun.transform.localPosition != currentGun.fineSightOriginPos)
             {
                 currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, currentGun.fineSightOriginPos, 0.1f);
@@ -265,7 +276,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // »ç¿îµå Àç»ı
+    // ì‚¬ìš´ë“œ ì¬ìƒ
     private void PlaySE(AudioClip _clip)
     {
         audioSource.clip = _clip;
@@ -275,6 +286,21 @@ public class GunController : MonoBehaviour
     public Gun GetGun()
     {
         return currentGun;
+    }
+    
+    public void GunChange(Gun _gun)
+    {
+        if (WeaponManager.currentWeapon != null)
+        
+            WeaponManager.currentWeapon.gameObject.SetActive(false);
+
+        currentGun = _gun;
+        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentGun.anim;
+
+        currentGun.transform.localPosition = Vector3.zero;
+        currentGun.gameObject.SetActive(true);
+        isActivate = true;
     }
 
 }
