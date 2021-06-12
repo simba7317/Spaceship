@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
+    // í™œì„±í™” ì—¬ë¶€.
+    public static bool isActivate = false;
 
-
-    // ÇöÀç ÀåÂøµÈ HandÇü Å¸ÀÔ ¹«±â.
+    // í˜„ì¬ ì¥ì°©ëœ Handí˜• íƒ€ì… ë¬´ê¸°.
     [SerializeField]
     private Hand currentHand;
 
-    // °ø°İÁß??
+    // ê³µê²©ì¤‘??
     private bool isAttack = false;
     private bool isSwing = false;
 
@@ -75,5 +76,21 @@ public class HandController : MonoBehaviour
         }
         return false;
     }
+    
+    
+     public void HandChange(Hand _hand)
+    {
+        if (WeaponManager.currentWeapon != null)
+            WeaponManager.currentWeapon.gameObject.SetActive(false);
+
+        currentHand = _hand;
+        WeaponManager.currentWeapon = currentHand.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentHand.anim;
+
+        currentHand.transform.localPosition = Vector3.zero;
+        currentHand.gameObject.SetActive(true);
+        isActivate = true;
+    }
+
 
 }
