@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HpController : MonoBehaviour
 {
-    // ì²´ë ¥
+    // Ã¼·Â
     [SerializeField]
     private int hp;
     private int currentHp;
 
-    // í•„ìš”í•œ ì´ë¯¸ì§€
+    // Ã¼·Â ÁÙ¾îµå´Â ¼Óµµ
+    [SerializeField]
+    private int hpDecreaseTime;
+    private int currentHpDecreaseTime;
+
+
+    // ÇÊ¿äÇÑ ÀÌ¹ÌÁö
     [SerializeField]
     private Image[] images_Gauge;
 
     private const int HP = 0;
-
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 
     // Use this for initialization
     void Start()
@@ -30,7 +32,26 @@ public class HpController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HpDown();
         GaugeUpdate();
+    }
+
+    public void HpDown()
+    {
+        if (currentHp > 0)
+        {
+            if (currentHpDecreaseTime <= hpDecreaseTime)
+                currentHpDecreaseTime++;
+            else
+            {
+                currentHp--;
+                currentHpDecreaseTime = 0;
+            }
+        }
+        else
+        {
+            SceneManager.LoadScene("GameOver");
+        }
     }
 
     private void GaugeUpdate()
@@ -49,8 +70,5 @@ public class HpController : MonoBehaviour
     public void DecreaseHP(int _count)
     {
         currentHp -= _count;
-
-        if (currentHp <= 0)
-            //ë‚˜ì¤‘ì— ê²Œìž„ ì˜¤ë²„ ì”¬ ì „í™˜í•˜ê¸°!
     }
 }
