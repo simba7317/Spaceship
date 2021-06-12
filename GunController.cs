@@ -137,10 +137,13 @@ public class GunController : MonoBehaviour
     // 재장전 시도
     private void TryReload()
     {
-        if (Input.GetKeyDown(KeyCode.R) && !isReload && currentGun.currentBulletCount < currentGun.reloadBulletCount)
+        if (!Inventory.inventoryActivated) // 인벤토리 실행 시 발사 안 되게
         {
-            CancelFineSight();
-            StartCoroutine(ReloadCoroutine());
+            if (Input.GetKeyDown(KeyCode.R) && !isReload && currentGun.currentBulletCount < currentGun.reloadBulletCount)
+            {
+                CancelFineSight();
+                StartCoroutine(ReloadCoroutine());
+            }
         }
     }
 
@@ -184,9 +187,12 @@ public class GunController : MonoBehaviour
     // 정조준 시도
     private void TryFineSight()
     {
-        if (Input.GetButtonDown("Fire2") && !isReload)
+        if (!Inventory.inventoryActivated) // 인벤토리 실행 시 발사 안 되게
         {
-            FineSight();
+            if (Input.GetButtonDown("Fire2") && !isReload)
+            {
+                FineSight();
+            }
         }
     }
 
