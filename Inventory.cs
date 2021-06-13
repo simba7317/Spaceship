@@ -8,13 +8,13 @@ public class Inventory : MonoBehaviour
     public static bool inventoryActivated = false;
 
 
-    // ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ®
+    // Ã‡ÃŠÂ¿Ã¤Ã‡Ã‘ Ã„Ã„Ã†Ã·Â³ÃÃ†Â®
     [SerializeField]
     private GameObject go_InventoryBase;
     [SerializeField]
     private GameObject go_SlotsParent;
 
-    // ½½·Ôµé
+    // Â½Â½Â·Ã”ÂµÃ©
     private Slot[] slots;
 
 
@@ -45,11 +45,13 @@ public class Inventory : MonoBehaviour
 
     private void OpenInventory()
     {
+        GameManager.isOpenInventory = true;
         go_InventoryBase.SetActive(true);
     }
 
     private void CloseInventory()
     {
+        GameManager.isOpenInventory = false;
         go_InventoryBase.SetActive(false);
     }
 
