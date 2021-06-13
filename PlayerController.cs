@@ -25,11 +25,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        Move();
-        if (!Inventory.inventoryActivated)
+        if ( GameManager.canPlayerMove)
         {
-            CameraRotation();
-            CharacterRotation();
+         Move();
+         CameraRotation();
+         CharacterRotation();
         }
     }
 
